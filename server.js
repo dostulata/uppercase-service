@@ -13,6 +13,15 @@ function routeEmAll(response, hndlrs, path, data) {
 	}
 }
 
+function isJSON(str) {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
+}
+
 function start(hndlrs) {
 	function onRequest(request, response) {
 		console.log("Processing request...");
@@ -24,7 +33,7 @@ function start(hndlrs) {
 			postData += postDataChunk;
 		});
 		request.addListener("end", function (){
-			if (postData) {
+			if (isJSON(postData)) {
 				data = JSON.parse(postData).data;
 			}
 			routeEmAll(response, hndlrs, path, data);
